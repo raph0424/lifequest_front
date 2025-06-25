@@ -1,10 +1,11 @@
+import { View, Text } from 'react-native';
 import { SafeAreaView,  } from 'react-native-safe-area-context';
-import { Text } from 'react-native';
 
-export default function HomeScreen() {
+
+export default function RoomScreen() {
   return (
     <SafeAreaView className="flex-1 justify-center items-center bg-white">
-      <Text className="text-xl font-bold">Bienvenue dans LifeQuest 👋</Text>
+      <Text className="text-xl font-bold">Ta chambre personnalisée 🏠</Text>
     </SafeAreaView>
   );
 }
