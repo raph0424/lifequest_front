@@ -1,5 +1,7 @@
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView,  } from 'react-native-safe-area-context';
+import BgQuest from '../components/BgQuest';
+import BottomNav from '../components/BottomNav';
 
 
 const quests = [
@@ -10,6 +12,7 @@ const quests = [
 
 export default function QuestListScreen() {
   return (
+    <BgQuest>
     <SafeAreaView  className="flex-1 justify-center items-center bg-white">
       <Text className="text-2xl font-bold mb-4">Quêtes du jour</Text>
 
@@ -27,5 +30,9 @@ export default function QuestListScreen() {
         )}
       />
     </SafeAreaView>
+         <BottomNav />
+
+        </BgQuest>
+
   );
 }
