@@ -41,8 +41,9 @@ export default function HomeScreen() {
           </Text>
           <Image
           source={require('../assets/favicon.png')}
-          className="w-12 h-12 mt-4"
-        />
+          className="w-12 h-12 mt-4"           // intégré barre d'xp circulaire
+
+        />  
         </View>
       </View>
     </SafeAreaView>
