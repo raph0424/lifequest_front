@@ -7,8 +7,9 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
-import Svg, { Defs, LinearGradient, Stop, Path, ClipPath, Rect } from 'react-native-svg';
+import Svg, { Defs, LinearGradient, Stop, Path, Rect } from 'react-native-svg';
 import MaskedView from '@react-native-masked-view/masked-view';
+import { Reward } from './QuestPopup';
 
 export interface Quest {
   id: number;
@@ -16,22 +17,23 @@ export interface Quest {
   title: string;
   description: string;
   image: ImageSourcePropType;
-  colorStart: string; // couleur de début du fond
+  colorStart: string;
   colorMid: string;
-  colorEnd: string;   // couleur de fin du fond (si dégradé)
+  colorEnd: string;
+  rewards: Reward[];
 }
 
 interface QuestCardProps {
   quest: Quest;
+  onStartPress: () => void;
 }
 
 const CARD_WIDTH = 342;
 const CARD_HEIGHT = 175;
 
-const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
+const QuestCard: React.FC<QuestCardProps> = ({ quest, onStartPress }) => {
   return (
     <View style={styles.wrapper}>
-      {/* Avatar en superposition */}
       <Image source={quest.image} style={styles.avatar} />
 
       <MaskedView
@@ -47,81 +49,79 @@ const QuestCard: React.FC<QuestCardProps> = ({ quest }) => {
       >
         <Svg width={CARD_WIDTH} height={CARD_HEIGHT}>
           <Defs>
-  <LinearGradient id={`grad-${quest.id}`} x1="0" y1="128" x2="354.142" y2="128" gradientUnits="userSpaceOnUse">
-    <Stop offset="0" stopColor={quest.colorStart} />
-    <Stop offset="0.9999" stopColor={quest.colorMid ?? quest.colorEnd} />
-    <Stop offset="1" stopColor={quest.colorEnd} />
-  </LinearGradient>
-</Defs>
+            <LinearGradient id={`grad-${quest.id}`} x1="0" y1="128" x2="354.142" y2="128" gradientUnits="userSpaceOnUse">
+              <Stop offset="0" stopColor={quest.colorStart} />
+              <Stop offset="0.9999" stopColor={quest.colorMid ?? quest.colorEnd} />
+              <Stop offset="1" stopColor={quest.colorEnd} />
+            </LinearGradient>
+          </Defs>
           <Rect width={CARD_WIDTH} height={CARD_HEIGHT} fill={`url(#grad-${quest.id})`} />
         </Svg>
 
-        {/* Contenu par-dessus le fond découpé */}
         <View style={styles.content}>
           <View style={styles.left}>
-             <Text
-          style={{
-            fontFamily: 'Cute',
-            fontSize: 76,
-            color: "white",
-            textAlign: 'center',
-           
-          }}
-        >
-          {quest.xp} xp
-        </Text>
+            <Text
+              style={{
+                fontFamily: 'Cute',
+                fontSize: 76,
+                color: "white",
+                textAlign: 'center',
+              }}
+            >
+              {quest.xp} xp
+            </Text>
 
             <Text style={styles.title}>{quest.title}</Text>
             <Text style={styles.description}>{quest.description}</Text>
           </View>
-          
         </View>
       </MaskedView>
+
       <View style={styles.right}>
-    <View style={styles.buttonWrapper}>
-        <Svg width="100%" height="100%">
+        <View style={styles.buttonWrapper}>
+          <Svg width="100%" height="100%">
             <Defs>
-<LinearGradient id={`button-gradient-${quest.id}`} x1="0" y1="0" x2="0" y2="1">
+              <LinearGradient id={`button-gradient-${quest.id}`} x1="0" y1="0" x2="0" y2="1">
                 <Stop offset="0" stopColor="#3A35CD" />
                 <Stop offset="0.5" stopColor="#9E76B8" />
                 <Stop offset="1" stopColor="#B7B7B7" />
-            </LinearGradient>
+              </LinearGradient>
             </Defs>
 
             <Rect
-            x="0"
-            y="0"
-            rx="12"
-            ry="12"
-            width="100%"
-            height="100%"
-            stroke="#FFD700"
-            strokeWidth="2"
-            fill="none"
+              x="0"
+              y="0"
+              rx="12"
+              ry="12"
+              width="100%"
+              height="100%"
+              stroke="#FFD700"
+              strokeWidth="2"
+              fill="none"
             />
 
             <Rect
-            x="1"
-            y="1"
-            rx="10"
-            ry="10"
-            width={88}
-            height={34}
-            fill={`url(#button-gradient-${quest.id})`}
+              x="1"
+              y="1"
+              rx="10"
+              ry="10"
+              width={88}
+              height={34}
+              fill={`url(#button-gradient-${quest.id})`}
             />
+          </Svg>
 
-        </Svg>
-
-        <TouchableOpacity style={styles.buttonOverlay}>
+          <TouchableOpacity style={styles.buttonOverlay} onPress={onStartPress}>
             <Text style={styles.buttonText}>Start</Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
         </View>
-          </View>
+      </View>
     </View>
   );
 };
 
 export default QuestCard;
+
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     height: 120,
     position: 'absolute',
     top: 5,
-    right: 45,
+    right: 25,
     zIndex: 3,
   },
   content: {
