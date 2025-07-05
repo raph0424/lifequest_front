@@ -34,8 +34,27 @@ const CARD_HEIGHT = 175;
 const QuestCard: React.FC<QuestCardProps> = ({ quest, onStartPress }) => {
   return (
     <View style={styles.wrapper}>
-      <Image source={quest.image} style={styles.avatar} />
+       <View style={styles.avatarContainer}>
+    <Image source={quest.image} style={styles.avatar} />
+    <View style={styles.buttonWrapper}>
+      <Svg width="100%" height="100%">
+        <Defs>
+          <LinearGradient id={`button-gradient-${quest.id}`} x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor="#3A35CD" />
+            <Stop offset="0.5" stopColor="#9E76B8" />
+            <Stop offset="1" stopColor="#B7B7B7" />
+          </LinearGradient>
+        </Defs>
 
+        <Rect x="0" y="0" rx="12" ry="12" width="100%" height="100%" stroke="#FFD700" strokeWidth="2" fill="none" />
+        <Rect x="1" y="1" rx="10" ry="10" width={88} height={34} fill={`url(#button-gradient-${quest.id})`} />
+      </Svg>
+
+      <TouchableOpacity style={styles.buttonOverlay} onPress={onStartPress}>
+        <Text style={styles.buttonText}>Start</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
       <MaskedView
         style={{ height: CARD_HEIGHT, width: CARD_WIDTH }}
         maskElement={
@@ -76,46 +95,6 @@ const QuestCard: React.FC<QuestCardProps> = ({ quest, onStartPress }) => {
           </View>
         </View>
       </MaskedView>
-
-      <View style={styles.right}>
-        <View style={styles.buttonWrapper}>
-          <Svg width="100%" height="100%">
-            <Defs>
-              <LinearGradient id={`button-gradient-${quest.id}`} x1="0" y1="0" x2="0" y2="1">
-                <Stop offset="0" stopColor="#3A35CD" />
-                <Stop offset="0.5" stopColor="#9E76B8" />
-                <Stop offset="1" stopColor="#B7B7B7" />
-              </LinearGradient>
-            </Defs>
-
-            <Rect
-              x="0"
-              y="0"
-              rx="12"
-              ry="12"
-              width="100%"
-              height="100%"
-              stroke="#FFD700"
-              strokeWidth="2"
-              fill="none"
-            />
-
-            <Rect
-              x="1"
-              y="1"
-              rx="10"
-              ry="10"
-              width={88}
-              height={34}
-              fill={`url(#button-gradient-${quest.id})`}
-            />
-          </Svg>
-
-          <TouchableOpacity style={styles.buttonOverlay} onPress={onStartPress}>
-            <Text style={styles.buttonText}>Start</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
     </View>
   );
 };
@@ -128,14 +107,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 12,
   },
-  avatar: {
-    width: 120,
-    height: 120,
-    position: 'absolute',
-    top: 5,
-    right: 25,
-    zIndex: 3,
-  },
+  avatarContainer: {
+  position: 'absolute',
+  top: 45,
+  right: 45,
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 5,
+},
+
+avatar: {
+  width: 100,
+  height: 100,
+},
+
   content: {
     position: 'absolute',
     flexDirection: 'row',
@@ -171,21 +156,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginTop: 2,
   },
- buttonWrapper: {
-  position: 'absolute',
-  top: -51,    // ajuste ici pour bien recouvrir l'avatar
-  right: -145,   // idem
+
+buttonWrapper: {
+  marginTop: -10,
   width: 90,
   height: 36,
   borderRadius: 12,
   backgroundColor: '#6A5ACD',
   justifyContent: 'center',
   alignItems: 'center',
-  zIndex: 10,  // bien plus grand que avatar (2)
-  elevation: 10, // pour Android (surélévation)
-
 },
-
 buttonOverlay: {
   position: 'absolute',
   top: 0,
@@ -194,12 +174,10 @@ buttonOverlay: {
   height: '100%',
   justifyContent: 'center',
   alignItems: 'center',
-    zIndex: 3,  // optionnel, en plus de buttonWrapper
-
 },
 
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
+buttonText: {
+  color: '#fff',
+  fontWeight: 'bold',
+},
 });
