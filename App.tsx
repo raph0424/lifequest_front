@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { RootStack } from './navigation/Stack';
 import { useFonts } from 'expo-font';
 import { Text } from 'react-native';
+import { suppressPixelStoreiWarnings } from './expo-gl-mute';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -11,6 +12,7 @@ export default function App() {
   'Cinzel-Bold': require('./assets/fonts/Cinzel-Bold.ttf'),
   });
 
+  suppressPixelStoreiWarnings()
   if (!fontsLoaded) {
     return <Text>Loading...</Text>;
   }

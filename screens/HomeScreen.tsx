@@ -4,19 +4,29 @@ import BottomNav from '../components/BottomNav';
 import { Canvas } from '@react-three/fiber/native';
 import { Warrior } from '../components/Warrior';
 import { Suspense } from 'react';
+import XpCircle from '../components/xpcircle';
 
 export default function HomeScreen() {
   return (
     <BgWrapper>
       <View style={styles.header}>
-        <Text style={styles.title}>LifeQuest</Text>
-        <View style={styles.xpBarContainer}>
-          <View style={styles.xpBarFill} />
-        </View>
-      </View>
+        <XpCircle percentage={65} size={80} />
 
+        <Text style={styles.title}>LifeQuest</Text>
+        
+      </View>
       <View style={styles.canvasContainer}>
-        <Canvas camera={{ position: [-1.4, 0.1, 4], fov: 20 }}>
+        <Canvas camera={{ position: [-1.4, 0.1, 4], fov: 20 }} onCreated={(state) => {
+  const _gl = state.gl.getContext();
+  const pixelStorei = _gl.pixelStorei.bind(_gl);
+  _gl.pixelStorei = function (...args) {
+    const [parameter] = args;
+    switch (parameter) {
+      case _gl.UNPACK_FLIP_Y_WEBGL:
+        return pixelStorei(...args);
+    }
+  };
+}} >
           <ambientLight intensity={0.4} />
           <directionalLight position={[5, 10, 5]} intensity={1.2} castShadow />
           <Suspense fallback={null}>
@@ -34,12 +44,17 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 40,
     paddingHorizontal: 20,
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: 'regular',
     color: '#fff',
+    paddingLeft: 30,
     marginBottom: 10,
+        fontFamily: 'Cinzel',
+
   },
   xpBarContainer: {
     height: 12,
